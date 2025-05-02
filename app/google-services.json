@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "329238707969",
+    "project_id": "bankbudgetingapp",
+    "storage_bucket": "bankbudgetingapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:329238707969:android:4690e5e740a6fc5890e500",
+        "android_client_info": {
+          "package_name": "com.example.bankbudgetingapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjWfPGY-iJVG0D8DJFERIlozJRJQ5S6SE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
