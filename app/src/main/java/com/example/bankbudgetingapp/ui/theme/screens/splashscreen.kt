@@ -1,6 +1,7 @@
 package com.example.bankbudgetingapp.ui.theme.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +37,7 @@ fun SplashScreen(onNavigateToNext: () -> Unit) {
 
     Box(
         modifier = Modifier.fillMaxSize()
+            .background(Color(0xFF101D3D)),
     ) {
         // Background image
         // Water drops overlay

@@ -52,7 +52,6 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
-    implementation(libs.ads.mobile.sdk)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -66,7 +65,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
-    implementation ("com.google.api-client:google-api-client-android:1.33.0")
-    implementation ("com.google.apis:google-api-services-gmail:v1-rev110-1.25.0")
+//    implementation ("com.google.api-client:google-api-client-android:1.33.0")
+//    implementation ("com.google.apis:google-api-services-gmail:v1-rev110-1.25.0")
 
 }
