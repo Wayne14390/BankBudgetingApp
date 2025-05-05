@@ -91,12 +91,8 @@ fun RegisterScreen(navController: NavController,viewModel: AuthViewModel = viewM
                 TopAppBar(
                     title = { Text(text = "") },
                     navigationIcon = {
-                        IconButton(onClick = {})
-                        {
-                            Icon(
-                                imageVector = Icons.Filled.ArrowBack,
-                                contentDescription = "Arrowback"
-                            )
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(

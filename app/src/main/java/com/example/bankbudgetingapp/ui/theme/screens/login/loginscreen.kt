@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
@@ -86,10 +87,10 @@ fun LoginScreen(navController: NavController,viewModel: AuthViewModel = viewMode
             Column (modifier = Modifier.fillMaxHeight().fillMaxWidth()) {
                 TopAppBar(
                     title = { Text(text = "") },
-                    navigationIcon = { IconButton(onClick = {
-                    })
-                    { Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Arrowback") } },
+                    navigationIcon = {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                    } },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color.Transparent,
                         navigationIconContentColor = Color.Blue,

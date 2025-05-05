@@ -76,9 +76,6 @@ class AuthViewModel: ViewModel() {
                 }
             }
     }
-    fun handleBackClick(navController: NavController, context: Context  ) {
-        navController.popBackStack()
-    }
     fun logout(navController: NavController, context: Context) {
         // Sign out the user
         mAuth.signOut()
