@@ -11,6 +11,7 @@ import com.example.bankbudgetingapp.ui.theme.screens.analysis.AnalysisScreen
 import com.example.bankbudgetingapp.ui.theme.screens.home.HomeScreen
 import com.example.bankbudgetingapp.ui.theme.screens.login.LoginScreen
 import com.example.bankbudgetingapp.ui.theme.screens.register.RegisterScreen
+import com.example.bankbudgetingapp.ui.theme.screens.scanning.ScannerScreen
 
 
 @Composable
@@ -25,10 +26,19 @@ fun AppNavHost(navController: NavHostController= rememberNavController(),startDe
         composable(ROUTE_HOME) { HomeScreen(navController) }
         composable(ROUTE_ANALYSIS) { AnalysisScreen(navController) }
         composable(UPDATE_PROFILE) { UpdateProfileScreen(navController) }
+        composable("scanner") {
+            ScannerScreen()
+        }
+
 
 
     }
     }
+
+@Composable
+fun AnalysisScreen(navController: NavHostController) {
+
+}
 
 
 

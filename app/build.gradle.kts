@@ -52,6 +52,9 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.play.services.mlkit.barcode.scanning)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -67,5 +70,12 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
 //    implementation ("com.google.api-client:google-api-client-android:1.33.0")
 //    implementation ("com.google.apis:google-api-services-gmail:v1-rev110-1.25.0")
+    // CameraX
+    implementation ("androidx.camera:camera-core:1.1.0")
+    implementation ("androidx.camera:camera-camera2:1.1.0")
+    implementation ("androidx.camera:camera-lifecycle:1.1.0")
+    implementation ("androidx.camera:camera-view:1.0.0-alpha32")
 
+    // ML Kit Barcode Scanning
+    implementation ("com.google.mlkit:barcode-scanning:17.0.2")
 }

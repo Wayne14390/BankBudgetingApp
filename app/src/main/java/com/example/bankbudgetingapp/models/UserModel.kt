@@ -13,6 +13,7 @@ data class UserModel(
     var fullname: String="",
     var email: String="",
     var password: String="",
+    var imageUrl: String = "",
     var userid: String="",
 )
 

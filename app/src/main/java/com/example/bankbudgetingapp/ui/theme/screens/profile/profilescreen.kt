@@ -58,6 +58,7 @@ fun UpdateProfileScreen(navController: NavController) {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },

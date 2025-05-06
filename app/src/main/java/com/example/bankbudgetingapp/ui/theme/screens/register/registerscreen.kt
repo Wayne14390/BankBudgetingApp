@@ -169,8 +169,8 @@ fun RegisterScreen(navController: NavController,viewModel: AuthViewModel = viewM
                     onClick = {
                         authViewModel.signup(fullname,email,password,navController,context)
                     },
-                    modifier = Modifier.wrapContentWidth().align(Alignment.CenterHorizontally)
-                        .width(250.dp),
+                    modifier = Modifier.fillMaxWidth()
+                        .width(150.dp),
                     colors = ButtonDefaults.buttonColors(Color.Blue)
                 ) { Text(text = "Continue") }
                 Spacer(modifier = Modifier.height(8.dp))

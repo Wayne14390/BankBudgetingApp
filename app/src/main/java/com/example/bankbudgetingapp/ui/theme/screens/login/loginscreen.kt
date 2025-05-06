@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -156,7 +157,7 @@ fun LoginScreen(navController: NavController,viewModel: AuthViewModel = viewMode
                 Spacer(modifier = Modifier.height(8.dp))
                 Button (onClick = {
                     authViewModel.login(email,password,navController, context)
-                }, modifier = Modifier.wrapContentWidth().align(Alignment.CenterHorizontally), colors = ButtonDefaults.buttonColors(Color.Green)) { Text(text = "Login") }
+                }, modifier = Modifier.fillMaxWidth().width(150.dp), colors = ButtonDefaults.buttonColors(Color.Green)) { Text(text = "Login") }
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = buildAnnotatedString { append("If you don't have an account,register here") }, modifier = Modifier.wrapContentWidth().align(
                     Alignment.CenterHorizontally).clickable {

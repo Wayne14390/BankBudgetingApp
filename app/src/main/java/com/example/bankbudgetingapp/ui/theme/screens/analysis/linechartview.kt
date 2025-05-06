@@ -1,4 +1,4 @@
-package com.example.bankbudgetingapp.ui.theme.screens.home
+package com.example.bankbudgetingapp.ui.theme.screens.analysis
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
