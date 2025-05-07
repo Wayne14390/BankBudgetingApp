@@ -1,4 +1,4 @@
-package com.example.bankbudgetingapp.ui.theme.screens
+ package com.example.bankbudgetingapp.ui.theme.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

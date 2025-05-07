@@ -38,6 +38,11 @@ android {
     buildFeatures {
         compose = true
     }
+    configurations.all {
+        resolutionStrategy {
+            force("com.google.android.material:material:1.9.0")
+        }
+    }
 }
 
 dependencies {
@@ -55,6 +60,8 @@ dependencies {
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.play.services.mlkit.barcode.scanning)
+    implementation(libs.places)
+    implementation(libs.androidx.games.activity)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -80,4 +87,6 @@ dependencies {
     implementation ("com.google.mlkit:barcode-scanning:17.0.2")
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation ("com.google.zxing:core:3.5.1")
+
+    implementation ("com.google.android.material:material:1.9.0'")
 }
