@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -52,6 +53,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.bankbudgetingapp.R
 import com.example.bankbudgetingapp.navigation.ROUTE_ANALYSIS
 import com.example.bankbudgetingapp.navigation.UPDATE_PROFILE
+import com.example.bankbudgetingapp.ui.theme.screens.scanning.ScannerActivity
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,10 +68,18 @@ fun HomeScreen(navController: NavController) {
                 selected = selectedItem.value == 2,
                 onClick = {
                     selectedItem.value = 2
-                    navController.navigate("scanner")
+                    // Code to invoke scanner functionality
+                    val scannerIntent = Intent(context, ScannerActivity::class.java)
+                    context.startActivity(scannerIntent)
                 },
-                icon = { Icon(Icons.Filled.Add, contentDescription = "Scan") },
-                label = { Text("Scan", color = Color.White) },
+                icon = {
+                    Image(
+                    painter = painterResource(id = R.drawable.baseline_qr_code_scanner_24),
+                    contentDescription = "chart",
+                    contentScale = ContentScale.FillBounds,
+                    modifier = Modifier.padding()
+                ) },
+                label = { Text(text = "Scan", color = Color.White) },
                 alwaysShowLabel = true
             )
             NavigationBarItem(
@@ -100,7 +110,7 @@ fun HomeScreen(navController: NavController) {
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.baseline_bar_chart_24),
-                    contentDescription = "background image",
+                    contentDescription = "chart",
                     contentScale = ContentScale.FillBounds,
                     modifier = Modifier.padding()
                 )

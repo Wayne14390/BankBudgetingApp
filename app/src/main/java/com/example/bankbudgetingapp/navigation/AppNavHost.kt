@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.bankbudgetingapp.ui.theme.screens.SplashScreen
 import com.example.bankbudgetingapp.ui.theme.screens.profile.UpdateProfileScreen
 import com.example.bankbudgetingapp.ui.theme.screens.analysis.AnalysisScreen
+import com.example.bankbudgetingapp.ui.theme.screens.budget.BudgetScreen
 import com.example.bankbudgetingapp.ui.theme.screens.home.HomeScreen
 import com.example.bankbudgetingapp.ui.theme.screens.login.LoginScreen
 import com.example.bankbudgetingapp.ui.theme.screens.register.RegisterScreen
@@ -29,9 +30,7 @@ fun AppNavHost(navController: NavHostController= rememberNavController(),startDe
         composable("scanner") {
             ScannerScreen()
         }
-
-
-
+        composable(ROUTE_BUDGET) { BudgetScreen(navController) }
     }
     }
 
