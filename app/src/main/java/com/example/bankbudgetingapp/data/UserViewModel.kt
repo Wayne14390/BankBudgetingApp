@@ -2,173 +2,96 @@ package com.example.bankbudgetingapp.data
 
 import androidx.lifecycle.ViewModel
 import com.google.firebase.database.FirebaseDatabase
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import android.app.AlertDialog
-import android.net.Uri
 import android.widget.Toast
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.io.File
 import android.content.Context
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.navigation.NavController
 import com.example.bankbudgetingapp.models.UserModel
-import com.example.bankbudgetingapp.navigation.UPDATE_PROFILE
-import com.example.bankbudgetingapp.network.ImgurService
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.mlkit.vision.barcode.common.Barcode.Email
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
-class UserViewModel: ViewModel() {
+class UserViewModel : ViewModel() {
+    private val auth = FirebaseAuth.getInstance()
     private val database = FirebaseDatabase.getInstance().reference.child("Users")
 
-    private fun getImgurService(): ImgurService {
-        val logging = HttpLoggingInterceptor()
-        logging.level = HttpLoggingInterceptor.Level.BODY
+    private val _userData = MutableStateFlow<UserModel?>(null)
+    val userData: StateFlow<UserModel?> get() = _userData
 
-        val client = OkHttpClient.Builder()
-            .addInterceptor(logging)
-            .build()
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> get() = _isLoading
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.imgur.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
-            .build()
-
-        return retrofit.create(ImgurService::class.java)
-    }
-    private fun getFileFromUri(context: Context, uri: Uri):
-            File? {
-        return try {
-            val inputStream = context.contentResolver
-                .openInputStream(uri)
-            val file = File.createTempFile("temp_image", ".jpg", context.cacheDir)
-            file.outputStream().use { output ->
-                inputStream?.copyTo(output)
+    /**
+     * Fetches the current authenticated user's data.
+     */
+    fun fetchUserData() {
+        val userId = auth.currentUser?.uid
+        if (userId != null) {
+            _isLoading.value = true
+            database.child(userId).get().addOnSuccessListener { snapshot ->
+                _userData.value = snapshot.getValue(UserModel::class.java)
+                _isLoading.value = false
+            }.addOnFailureListener {
+                _isLoading.value = false
+                it.printStackTrace()
             }
-            file
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
         }
     }
-    fun uploadUserWithImage(
-        uri: Uri,
+
+    /**
+     * Updates the current user's data (excluding the password).
+     */
+    fun updateUser(
         context: Context,
+        navController: NavController,
         fullname: String,
         email: String,
-        password:String,
-        navController: NavController
+        imageUrl: String = ""
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val file = getFileFromUri(context, uri)
-                if (file == null) {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(context, "Failed to process image", Toast.LENGTH_SHORT).show()
-                    }
-                    return@launch
-                }
-
-                val reqFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-                val body = MultipartBody.Part.createFormData("image", file.name, reqFile)
-
-                val response = getImgurService().uploadImage(
-                    body,
-                    "Client-ID bf0fc9d3ba971c3"
-                )
-
-                if (response.isSuccessful) {
-                    val imageUrl = response.body()?.data?.link ?: ""
-
-                    val userId = database.push().key ?: ""
-                    val user = UserModel(
-                        fullname, email,password, imageUrl, userId
-                    )
-
-                    database.child(userId).setValue(user)
-                        .addOnSuccessListener {
-                            viewModelScope.launch {
-                                withContext(Dispatchers.Main) {
-                                    Toast.makeText(context, "User saved successfully", Toast.LENGTH_SHORT).show()
-                                    navController.navigate(UPDATE_PROFILE)
-
-                                }
-                            }
-                        }.addOnFailureListener {
-                            viewModelScope.launch {
-                                withContext(Dispatchers.Main) {
-                                    Toast.makeText(context, "Failed to save user", Toast.LENGTH_SHORT).show()
-                                }
-                            }
-                        }
-
-                } else {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(context, "Upload error", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "Exception: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
-                }
-            }
-        }
-    }
-
-    fun updateStudent(context: Context, navController: NavController,
-                      fullname: String,email: String,password: String, userId: String){
-        val databaseReference = FirebaseDatabase.getInstance()
-            .getReference("Users/$userId")
+        val userId = auth.currentUser?.uid ?: return
         val updatedUser = UserModel(
-            fullname,email,password, "", userId
+            fullname = fullname,
+            email = email,
+            imageUrl = imageUrl,
+            userId = userId
         )
 
-        databaseReference.setValue(updatedUser)
+        database.child(userId).setValue(updatedUser)
             .addOnCompleteListener { task ->
-                if (task.isSuccessful){
-
-                    Toast.makeText(context,"Student Updated Successfully", Toast.LENGTH_LONG).show()
-                    navController.navigate(UPDATE_PROFILE)
-                }else{
-
-                    Toast.makeText(context,"Student update failed", Toast.LENGTH_LONG).show()
+                if (task.isSuccessful) {
+                    Toast.makeText(context, "Profile updated successfully", Toast.LENGTH_SHORT).show()
+                    navController.navigate("profile") // Replace "profile" with your desired route
+                } else {
+                    Toast.makeText(context, "Profile update failed", Toast.LENGTH_SHORT).show()
                 }
             }
     }
 
-
-    fun deleteUser(context: Context,userId: String,
-                      navController: NavController){
+    /**
+     * Deletes the current user's account.
+     */
+    fun deleteUser(
+        context: Context,
+        navController: NavController
+    ) {
+        val userId = auth.currentUser?.uid ?: return
         AlertDialog.Builder(context)
-            .setTitle("Delete User")
+            .setTitle("Delete Account")
             .setMessage("Are you sure you want to delete your account?")
-            .setPositiveButton("Yes"){ _, _ ->
-                val databaseReference = FirebaseDatabase.getInstance()
-                    .getReference("User/$userId")
-                databaseReference.removeValue().addOnCompleteListener {
-                        task ->
-                    if (task.isSuccessful){
-
-                        Toast.makeText(context,"Account deleted Successfully",Toast.LENGTH_LONG).show()
-                    }else{
-                        Toast.makeText(context,"Account not deleted",Toast.LENGTH_LONG).show()
+            .setPositiveButton("Yes") { _, _ ->
+                // Delete user from Firebase Database
+                database.child(userId).removeValue().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // Optionally, log the user out
+                        auth.signOut()
+                        Toast.makeText(context, "Account deleted successfully", Toast.LENGTH_LONG).show()
+                        navController.navigate("login") // Replace "login" with your desired route
+                    } else {
+                        Toast.makeText(context, "Failed to delete account", Toast.LENGTH_LONG).show()
                     }
                 }
             }
-            .setNegativeButton("No"){ dialog, _ ->
+            .setNegativeButton("No") { dialog, _ ->
                 dialog.dismiss()
             }
             .show()

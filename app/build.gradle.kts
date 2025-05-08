@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.play.services.mlkit.barcode.scanning)
     implementation(libs.places)
     implementation(libs.androidx.games.activity)
+    implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -89,4 +90,5 @@ dependencies {
     implementation ("com.google.zxing:core:3.5.1")
 
     implementation ("com.google.android.material:material:1.9.0'")
+    implementation ("io.coil-kt:coil-compose:2.3.0")
 }

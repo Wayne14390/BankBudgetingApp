@@ -9,11 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+
 data class UserModel(
-    var fullname: String="",
-    var email: String="",
-    var password: String="",
-    var imageUrl: String = "",
-    var userid: String="",
+    val fullname: String = "",
+    val email: String = "",
+    val password: String = "", // Stored securely, not fetched or displayed
+    val imageUrl: String = "",
+    val userId: String = ""
 )
 

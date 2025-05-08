@@ -30,7 +30,7 @@ class AuthViewModel: ViewModel() {
                 if (task.isSuccessful){
                     val userId  = mAuth.currentUser?.uid ?: ""
                     val userData = UserModel(
-                        fullname = fullname,email = email,password = password, userid = userId
+                        fullname = fullname,email = email,password = password, userId = userId
                         )
                     saveUserToDatabase(userId,userData,navController,context)
                 } else{

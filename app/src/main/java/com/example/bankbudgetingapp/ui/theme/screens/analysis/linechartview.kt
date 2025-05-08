@@ -11,22 +11,15 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 
+
 @Composable
-fun LineChartView(modifier: Modifier = Modifier) {
+fun LineChartView(modifier: Modifier = Modifier, entries: List<Entry>) {
     AndroidView(
         modifier = modifier
             .fillMaxWidth()
             .height(200.dp),
         factory = { context ->
             LineChart(context).apply {
-                val entries = listOf(
-                    Entry(0f, 2f),
-                    Entry(1f, 4f),
-                    Entry(2f, 1f),
-                    Entry(3f, 3f),
-                    Entry(4f, 5f)
-                )
-
                 val dataSet = LineDataSet(entries, "Budget Trend").apply {
                     color = android.graphics.Color.BLUE
                     valueTextColor = android.graphics.Color.BLACK

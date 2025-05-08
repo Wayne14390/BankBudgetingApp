@@ -3,9 +3,13 @@ package com.example.bankbudgetingapp.ui.theme.screens.home
 
 import android.content.Intent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -38,6 +42,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -55,12 +60,15 @@ import androidx.navigation.compose.rememberNavController
 import com.example.bankbudgetingapp.R
 import com.example.bankbudgetingapp.navigation.UPDATE_PROFILE
 import com.example.bankbudgetingapp.ScannerActivity
+import com.example.bankbudgetingapp.navigation.VIEW_PROFILE
+import com.example.bankbudgetingapp.ui.theme.screens.analysis.LineChartView
 import kotlinx.coroutines.launch
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, lineChartView: @Composable () -> Unit) {
     val selectedItem = remember { mutableStateOf(0) }
     val context = LocalContext.current
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed) // State for the navigation drawer
@@ -207,7 +215,7 @@ fun HomeScreen(navController: NavController) {
                         selected = selectedItem.value == 3,
                         onClick = {
                             selectedItem.value = 3
-                            navController.navigate(UPDATE_PROFILE) // Navigate to Profile screen
+                            navController.navigate(VIEW_PROFILE) // Navigate to Profile screen
                         },
                         icon = { Icon(Icons.Filled.Person, contentDescription = "Profile", tint = Color.White) },
                         label = { Text(text = "Profile", color = Color.White) },
@@ -236,13 +244,19 @@ fun HomeScreen(navController: NavController) {
             },
             floatingActionButtonPosition = FabPosition.Center // Position the FAB at the center of the bottom bar
         ) { innerPadding ->
-            Box(modifier = Modifier.fillMaxHeight()) {
-                Image(
-                    painter = painterResource(id = R.drawable.background),
-                    contentDescription = "background image",
-                    contentScale = ContentScale.FillBounds,
-                    modifier = Modifier.padding(innerPadding),
-                )
+            Column(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+                // LineChartView Function: Added below TopAppBar
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Background Image
+                Box(modifier = Modifier.fillMaxHeight()) {
+                    Image(
+                        painter = painterResource(id = R.drawable.background),
+                        contentDescription = "background image",
+                        contentScale = ContentScale.FillBounds
+                    )
+                }
             }
         }
     }
@@ -251,5 +265,16 @@ fun HomeScreen(navController: NavController) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(rememberNavController())
+    HomeScreen(rememberNavController()) {
+        // Placeholder for LineChartView
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .background(Color.LightGray),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("Line Chart Placeholder")
+        }
+    }
 }
