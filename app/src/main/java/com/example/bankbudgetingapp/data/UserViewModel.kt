@@ -68,7 +68,7 @@ class UserViewModel: ViewModel() {
         context: Context,
         fullname: String,
         email: String,
-        password: String,
+        password:String,
         navController: NavController
     ) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -86,7 +86,7 @@ class UserViewModel: ViewModel() {
 
                 val response = getImgurService().uploadImage(
                     body,
-                    "Client-ID 66203b5a0595a51"
+                    "Client-ID bf0fc9d3ba971c3"
                 )
 
                 if (response.isSuccessful) {
@@ -94,9 +94,25 @@ class UserViewModel: ViewModel() {
 
                     val userId = database.push().key ?: ""
                     val user = UserModel(
-                        fullname,email,password,imageUrl, userId
+                        fullname, email,password, imageUrl, userId
                     )
+
                     database.child(userId).setValue(user)
+                        .addOnSuccessListener {
+                            viewModelScope.launch {
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(context, "User saved successfully", Toast.LENGTH_SHORT).show()
+                                    navController.navigate(UPDATE_PROFILE)
+
+                                }
+                            }
+                        }.addOnFailureListener {
+                            viewModelScope.launch {
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(context, "Failed to save user", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
 
                 } else {
                     withContext(Dispatchers.Main) {
@@ -111,43 +127,44 @@ class UserViewModel: ViewModel() {
             }
         }
     }
-//    fun updateUser(context: Context, navController: NavController,
-//                      fullname: String,email: Email,password: String,){
-//        val databaseReference = FirebaseDatabase.getInstance()
-//            .getReference("User/$userId")
-//        val updatedUser = UserModel(
-//            fullname,email,password, "", userId
-//        )
-//
-//        databaseReference.setValue(updatedUser)
-//            .addOnCompleteListener { task ->
-//                if (task.isSuccessful){
-//
-//                    Toast.makeText(context,"User Updated Successfully", Toast.LENGTH_LONG).show()
-//                    navController.navigate(UPDATE_PROFILE)
-//                }else{
-//
-//                    Toast.makeText(context,"User update failed", Toast.LENGTH_LONG).show()
-//                }
-//            }
-//    }
+
+    fun updateStudent(context: Context, navController: NavController,
+                      fullname: String,email: String,password: String, userId: String){
+        val databaseReference = FirebaseDatabase.getInstance()
+            .getReference("Users/$userId")
+        val updatedUser = UserModel(
+            fullname,email,password, "", userId
+        )
+
+        databaseReference.setValue(updatedUser)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful){
+
+                    Toast.makeText(context,"Student Updated Successfully", Toast.LENGTH_LONG).show()
+                    navController.navigate(UPDATE_PROFILE)
+                }else{
+
+                    Toast.makeText(context,"Student update failed", Toast.LENGTH_LONG).show()
+                }
+            }
+    }
 
 
-    fun deleteStudent(context: Context,studentId: String,
+    fun deleteUser(context: Context,userId: String,
                       navController: NavController){
         AlertDialog.Builder(context)
-            .setTitle("Delete Student")
-            .setMessage("Are you sure you want to delete this student?")
+            .setTitle("Delete User")
+            .setMessage("Are you sure you want to delete your account?")
             .setPositiveButton("Yes"){ _, _ ->
                 val databaseReference = FirebaseDatabase.getInstance()
-                    .getReference("Students/$studentId")
+                    .getReference("User/$userId")
                 databaseReference.removeValue().addOnCompleteListener {
                         task ->
                     if (task.isSuccessful){
 
-                        Toast.makeText(context,"Student deleted Successfully",Toast.LENGTH_LONG).show()
+                        Toast.makeText(context,"Account deleted Successfully",Toast.LENGTH_LONG).show()
                     }else{
-                        Toast.makeText(context,"Student not deleted",Toast.LENGTH_LONG).show()
+                        Toast.makeText(context,"Account not deleted",Toast.LENGTH_LONG).show()
                     }
                 }
             }
