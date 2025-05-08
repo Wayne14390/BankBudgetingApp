@@ -3,13 +3,11 @@ package com.example.bankbudgetingapp.ui.theme.screens.home
 
 import android.content.Intent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -42,7 +40,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -58,17 +55,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.bankbudgetingapp.R
-import com.example.bankbudgetingapp.navigation.UPDATE_PROFILE
 import com.example.bankbudgetingapp.ScannerActivity
 import com.example.bankbudgetingapp.navigation.VIEW_PROFILE
-import com.example.bankbudgetingapp.ui.theme.screens.analysis.LineChartView
 import kotlinx.coroutines.launch
-
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController, lineChartView: @Composable () -> Unit) {
+fun HomeScreen(navController: NavController) {
     val selectedItem = remember { mutableStateOf(0) }
     val context = LocalContext.current
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed) // State for the navigation drawer
@@ -247,8 +241,6 @@ fun HomeScreen(navController: NavController, lineChartView: @Composable () -> Un
             Column(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
                 // LineChartView Function: Added below TopAppBar
 
-                Spacer(modifier = Modifier.height(16.dp))
-
                 // Background Image
                 Box(modifier = Modifier.fillMaxHeight()) {
                     Image(
@@ -265,16 +257,5 @@ fun HomeScreen(navController: NavController, lineChartView: @Composable () -> Un
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(rememberNavController()) {
-        // Placeholder for LineChartView
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .background(Color.LightGray),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("Line Chart Placeholder")
-        }
-    }
+    HomeScreen(rememberNavController())
 }

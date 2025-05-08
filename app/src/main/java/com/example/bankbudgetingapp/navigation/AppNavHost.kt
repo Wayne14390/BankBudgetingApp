@@ -26,7 +26,7 @@ fun AppNavHost(navController: NavHostController= rememberNavController(),startDe
         }
         composable(ROUTE_REGISTER) { RegisterScreen(navController)}
         composable(ROUTE_LOGIN) { LoginScreen(navController)}
-        composable(ROUTE_HOME) { HomeScreen(navController) }
+        composable(ROUTE_HOME) { HomeScreen(navController)}
         composable(ROUTE_ANALYSIS) { AnalysisScreen(navController) }
         composable(UPDATE_PROFILE) { UpdateProfileScreen(navController) }
         composable("scanner") {
