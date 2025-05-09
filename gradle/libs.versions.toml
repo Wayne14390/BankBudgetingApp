@@ -17,6 +17,7 @@ playServicesMlkitBarcodeScanning = "18.3.1"
 places = "4.2.0"
 gamesActivity = "4.0.0"
 firebaseFirestoreKtx = "25.1.4"
+runtimeLivedata = "1.8.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -41,6 +42,7 @@ play-services-mlkit-barcode-scanning = { group = "com.google.android.gms", name 
 places = { group = "com.google.android.libraries.places", name = "places", version.ref = "places" }
 androidx-games-activity = { group = "androidx.games", name = "games-activity", version.ref = "gamesActivity" }
 firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
+androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

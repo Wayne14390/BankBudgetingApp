@@ -89,6 +89,32 @@ class AuthViewModel: ViewModel() {
             launchSingleTop = true
         }
     }
+    fun pushBudgetToFirebase(
+        budgetName: String,
+        selectedCategory: String,
+        budgetAmount: String,
+        budgetPeriod: String,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        val database = FirebaseDatabase.getInstance()
+        val budgetRef = database.getReference("budgets")
+
+        val budgetData = mapOf(
+            "budgetName" to budgetName,
+            "category" to selectedCategory,
+            "amount" to budgetAmount,
+            "period" to budgetPeriod
+        )
+
+        budgetRef.push().setValue(budgetData)
+            .addOnSuccessListener {
+                onSuccess()
+            }
+            .addOnFailureListener { exception ->
+                onError(exception)
+            }
+    }
 
 
 }

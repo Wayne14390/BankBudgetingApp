@@ -56,6 +56,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.bankbudgetingapp.R
 import com.example.bankbudgetingapp.ScannerActivity
+import com.example.bankbudgetingapp.navigation.VIEW_BUDGET
 import com.example.bankbudgetingapp.navigation.VIEW_PROFILE
 import kotlinx.coroutines.launch
 
@@ -93,7 +94,7 @@ fun HomeScreen(navController: NavController) {
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() } // Close the drawer
-                        navController.navigate("expenses") // Navigate to Expenses screen
+                        navController.navigate(VIEW_BUDGET) // Navigate to Expenses screen
                     },
                     icon = {
                         Image(
@@ -199,7 +200,7 @@ fun HomeScreen(navController: NavController) {
                         selected = selectedItem.value == 2,
                         onClick = {
                             selectedItem.value = 2
-                            navController.navigate("budget")
+                            navController.navigate(VIEW_BUDGET)
                         },
                         icon = { Icon(Icons.Filled.Create, contentDescription = "Budget", tint = Color.White) },
                         label = { Text(text = "Budget", color = Color.White) },

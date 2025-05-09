@@ -9,12 +9,11 @@ import com.example.bankbudgetingapp.ui.theme.screens.SplashScreen
 import com.example.bankbudgetingapp.ui.theme.screens.profile.UpdateProfileScreen
 import com.example.bankbudgetingapp.ui.theme.screens.analysis.AnalysisScreen
 import com.example.bankbudgetingapp.ui.theme.screens.budget.AddBudgetScreen
-import com.example.bankbudgetingapp.ui.theme.screens.budget.BudgetScreen
 import com.example.bankbudgetingapp.ui.theme.screens.home.HomeScreen
 import com.example.bankbudgetingapp.ui.theme.screens.login.LoginScreen
 import com.example.bankbudgetingapp.ui.theme.screens.profile.ViewProfileScreen
 import com.example.bankbudgetingapp.ui.theme.screens.register.RegisterScreen
-import com.example.bankbudgetingapp.ui.theme.screens.scanning.ScannerScreen
+import com.example.bankbudgetingapp.ui.theme.screens.viewbudget.ViewBudgetScreen
 
 
 @Composable
@@ -29,10 +28,7 @@ fun AppNavHost(navController: NavHostController= rememberNavController(),startDe
         composable(ROUTE_HOME) { HomeScreen(navController)}
         composable(ROUTE_ANALYSIS) { AnalysisScreen(navController) }
         composable(UPDATE_PROFILE) { UpdateProfileScreen(navController) }
-        composable("scanner") {
-            ScannerScreen()
-        }
-        composable(ROUTE_BUDGET) { BudgetScreen(navController) }
+        composable(VIEW_BUDGET) { ViewBudgetScreen(navController) }
         composable(VIEW_PROFILE) { ViewProfileScreen(navController) }
         composable(ADD_BUDGET) { AddBudgetScreen(navController) }
     }

@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.places)
     implementation(libs.androidx.games.activity)
     implementation(libs.firebase.firestore.ktx)
+    implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
