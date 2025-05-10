@@ -1,6 +1,7 @@
 package com.example.bankbudgetingapp.models
 
 data class BudgetModel(
+    val budgetId: String = "",
     val name: String = "",
     val category: String = "",
     val amount: Double = 0.0,

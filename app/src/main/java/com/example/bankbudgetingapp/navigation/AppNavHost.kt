@@ -1,6 +1,7 @@
 package com.example.bankbudgetingapp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -28,9 +29,13 @@ fun AppNavHost(navController: NavHostController= rememberNavController(),startDe
         composable(ROUTE_HOME) { HomeScreen(navController)}
         composable(ROUTE_ANALYSIS) { AnalysisScreen(navController) }
         composable(UPDATE_PROFILE) { UpdateProfileScreen(navController) }
-        composable(VIEW_BUDGET) { ViewBudgetScreen(navController) }
+        composable(VIEW_BUDGET) {     ViewBudgetScreen(navController) }
         composable(VIEW_PROFILE) { ViewProfileScreen(navController) }
         composable(ADD_BUDGET) { AddBudgetScreen(navController) }
+//        composable("update_budget/{budgetId}") { backStackEntry ->
+//            val budgetId = backStackEntry.arguments?.getString("budgetId")
+//            UpdateBudgetScreen(navController, budgetId)
+//        }
     }
     }
 
