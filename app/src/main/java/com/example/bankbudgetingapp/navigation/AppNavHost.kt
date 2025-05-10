@@ -10,6 +10,7 @@ import com.example.bankbudgetingapp.ui.theme.screens.SplashScreen
 import com.example.bankbudgetingapp.ui.theme.screens.profile.UpdateProfileScreen
 import com.example.bankbudgetingapp.ui.theme.screens.analysis.AnalysisScreen
 import com.example.bankbudgetingapp.ui.theme.screens.budget.AddBudgetScreen
+import com.example.bankbudgetingapp.ui.theme.screens.budget.UpdateBudgetScreen
 import com.example.bankbudgetingapp.ui.theme.screens.home.HomeScreen
 import com.example.bankbudgetingapp.ui.theme.screens.login.LoginScreen
 import com.example.bankbudgetingapp.ui.theme.screens.profile.ViewProfileScreen
@@ -32,10 +33,10 @@ fun AppNavHost(navController: NavHostController= rememberNavController(),startDe
         composable(VIEW_BUDGET) {     ViewBudgetScreen(navController) }
         composable(VIEW_PROFILE) { ViewProfileScreen(navController) }
         composable(ADD_BUDGET) { AddBudgetScreen(navController) }
-//        composable("update_budget/{budgetId}") { backStackEntry ->
-//            val budgetId = backStackEntry.arguments?.getString("budgetId")
-//            UpdateBudgetScreen(navController, budgetId)
-//        }
+        composable("$UPDATE_BUDGET/{budgetId}") {
+                passedData -> UpdateBudgetScreen(
+            navController, passedData.arguments?.getString("budgetId")!! )
+        }
     }
     }
 

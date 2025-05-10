@@ -46,24 +46,30 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.bankbudgetingapp.data.BudgetViewModel
 import com.example.bankbudgetingapp.models.BudgetModel
 import com.example.bankbudgetingapp.navigation.ADD_BUDGET
+import com.example.bankbudgetingapp.navigation.UPDATE_BUDGET
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ViewBudgetScreen(
-    navController: NavController,
-    viewModel: BudgetViewModel = viewModel()
+    navController: NavHostController,
 ) {
     val context = LocalContext.current
-    val budgets = remember { mutableStateListOf<BudgetModel>() }
-
-    LaunchedEffect(Unit) {
-        Log.d("ViewBudgetScreen", "ViewBudgetScreen opened")
-        viewModel.viewBudgets(budgets, context)
+    val budgetRepository = BudgetViewModel()
+    val emptyUploadState = remember {
+        mutableStateOf(
+            BudgetModel("", "", "", 0.0, "", System.currentTimeMillis())
+        )
     }
+    val emptyUploadListState = remember {
+        mutableStateListOf<BudgetModel>()
+    }
+    val budgets = budgetRepository.viewBudget(
+        emptyUploadState,emptyUploadListState, context)
 
     Scaffold(
         topBar = {
@@ -105,116 +111,117 @@ fun ViewBudgetScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            LazyColumn {
-                items(budgets) { budget ->
-                    if (budget != null && budget.budgetId.isNotEmpty()) {
-                        BudgetItem(
-                            budget = budget,
-                            navController = navController,
-                            viewModel = viewModel
-                        )
-                    } else {
-                        Log.e("BudgetItem", "Invalid or null budget object")
-                    }
+            LazyColumn{
+                items(budgets){
+                    BudgetItem(
+                        budgetId = it.budgetId,
+                        name = it.name,
+                        category = it.category,
+                        amount = it.amount,
+                        period = it.period,
+                        createdAt = it.createdAt,
+                        navController = navController,
+                        budgetRepository = budgetRepository
+
+                    )
                 }
+
             }
         }
     }
 }
 
 @Composable
-fun BudgetItem(
-    budget: BudgetModel,
-    navController: NavController,
-    viewModel: BudgetViewModel
-) {
+fun BudgetItem(budgetId: String,name: String ,category: String,amount: Double,
+               period: String ,createdAt: Long,navController: NavHostController,
+                budgetRepository: BudgetViewModel
+){
     val context = LocalContext.current
-    Card(
-        modifier = Modifier
+    Column (modifier = Modifier.fillMaxWidth()){
+        Card (modifier = Modifier
             .padding(10.dp)
-            .fillMaxWidth()
             .height(210.dp),
-        shape = MaterialTheme.shapes.medium,
-        colors = CardDefaults.cardColors(containerColor = Color.Gray)
-    ) {
-        Column(modifier = Modifier.padding(10.dp)) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Button(
-                    onClick = {
-                        viewModel.deleteBudget(context, budget.budgetId, navController)
-                    },
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(Color.Red)
-                ) {
-                    Text(
-                        text = "REMOVE",
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp
-                    )
+            shape = MaterialTheme.shapes.medium,
+            colors = CardDefaults.cardColors
+                (containerColor = Color.Gray))
+        {
+            Row {
+                Column {
+
+
+                    Row(horizontalArrangement = Arrangement.SpaceBetween) {
+                        Button(onClick = {
+                            budgetRepository.deleteBudget(context,budgetId,navController)
+
+                        },
+                            shape = RoundedCornerShape(10.dp),
+                            colors = ButtonDefaults.buttonColors(Color.Red)
+                        ) {
+                            Text(text = "REMOVE",
+                                color = Color.Black,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp)
+                        }
+                        Button(onClick = {
+                            navController.navigate("$UPDATE_BUDGET/$budgetId")
+                        },
+                            shape = RoundedCornerShape(10.dp),
+                            colors = ButtonDefaults.buttonColors(Color.Green)
+                        ) {
+                            Text(text = "UPDATE",
+                                color = Color.Black,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp)
+                        }
+                    }
+
                 }
-                Button(
-                    onClick = {
-                        // Navigate to the "Update Budget" screen
-//                        navController.navigate("$ROUTE_UPDATE_BUDGET/${budget.budgetId}")
-                    },
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(Color.Green)
-                ) {
+                Column (modifier = Modifier
+                    .padding(vertical = 10.dp, horizontal = 10.dp)
+                    .verticalScroll(rememberScrollState())){
+                    Spacer(modifier = Modifier.height(10.dp))
+
                     Text(
-                        text = "UPDATE",
+                        text = "BUDGET NAME",
                         color = Color.Black,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = name,
+                        color = Color.White,
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "CATEGORY",
+                        color = Color.Black,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = category,
+                        color = Color.White,
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "PERIOD",
+                        color = Color.Black,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = period,
+                        color = Color.White,
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Bold
                     )
                 }
             }
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Text(
-                text = "BUDGET NAME",
-                color = Color.Black,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = budget.name,
-                color = Color.White,
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = "CATEGORY",
-                color = Color.Black,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = budget.category,
-                color = Color.White,
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = "PERIOD",
-                color = Color.Black,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = budget.period,
-                color = Color.White,
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold
-            )
         }
     }
 }
-
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ViewBudgetScreenPreview() {

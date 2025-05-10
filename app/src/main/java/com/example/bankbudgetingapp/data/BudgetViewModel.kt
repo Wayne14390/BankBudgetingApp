@@ -21,69 +21,87 @@ import com.google.firebase.database.ValueEventListener
 
 class BudgetViewModel : ViewModel() {
 
-    private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
-    private val budgetRef: DatabaseReference = database.getReference("budgets")
+    private val database = FirebaseDatabase.getInstance().reference.child("budgets")
 
-    fun viewBudgets(
+    fun viewBudget(
+        budget: MutableState<BudgetModel>,
         budgets: SnapshotStateList<BudgetModel>,
         context: Context
-    ) {
-        budgetRef.addValueEventListener(object : ValueEventListener {
+    ): SnapshotStateList<BudgetModel> {
+        val ref = FirebaseDatabase.getInstance().getReference("budgets")
+
+        ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                try {
-                    budgets.clear()
-                    for (snap in snapshot.children) {
-                        snap.getValue(BudgetModel::class.java)?.let {
-                            budgets.add(it)
-                        }
+                budgets.clear()
+                for (snap in snapshot.children) {
+                    val value = snap.getValue(BudgetModel::class.java)
+                    value?.let {
+                        budgets.add(it)
                     }
-                } catch (e: Exception) {
-                    Log.e("FirebaseError", "Error parsing budget data", e)
+                }
+                if (budgets.isNotEmpty()) {
+                    budget.value = budgets.first()
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e("FirebaseError", "Failed to fetch budgets: ${error.message}")
+                Toast.makeText(
+                    context,
+                    "Failed to fetch budgets: ${error.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+
             }
         })
-    }
 
-    fun updateBudget(
-        context: Context,
-        navController: NavController,
-        budget: BudgetModel
-    ) {
-        val databaseReference = budgetRef.child(budget.budgetId)
-        databaseReference.setValue(budget)
+        return budgets
+
+    }
+    fun updateBudget(context: Context, navController: NavController,
+                     budgetId: String,name: String ,category: String,
+                     amount: Double, period: String, createdAt: Long){
+        val databaseReference = FirebaseDatabase.getInstance()
+            .getReference("budgets/$budgetId")
+        val updatedBudget =BudgetModel(
+            budgetId,name,category,
+            amount,period,createdAt
+        )
+
+        databaseReference.setValue(updatedBudget)
             .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(context, "Budget Updated Successfully", Toast.LENGTH_LONG).show()
+                if (task.isSuccessful){
+
+                    Toast.makeText(context,"Budget Updated Successfully", Toast.LENGTH_LONG).show()
                     navController.navigate(VIEW_BUDGET)
-                } else {
-                    Toast.makeText(context, "Budget update failed", Toast.LENGTH_LONG).show()
+                }else{
+
+                    Toast.makeText(context,"Budget update failed", Toast.LENGTH_LONG).show()
                 }
             }
     }
 
-    fun deleteBudget(
-        context: Context,
-        budgetId: String,
-        navController: NavController
-    ) {
+
+    fun deleteBudget(context: Context,budgetId: String,
+                      navController: NavController){
         AlertDialog.Builder(context)
             .setTitle("Delete Budget")
             .setMessage("Are you sure you want to delete this budget?")
-            .setPositiveButton("Yes") { _, _ ->
-                budgetRef.child(budgetId).removeValue()
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Toast.makeText(context, "Budget deleted Successfully", Toast.LENGTH_LONG).show()
-                        } else {
-                            Toast.makeText(context, "Budget not deleted", Toast.LENGTH_LONG).show()
-                        }
+            .setPositiveButton("Yes"){ _, _ ->
+                val databaseReference = FirebaseDatabase.getInstance()
+                    .getReference("budgets/$budgetId")
+                databaseReference.removeValue().addOnCompleteListener {
+                        task ->
+                    if (task.isSuccessful){
+
+                        Toast.makeText(context,"Budget deleted Successfully",Toast.LENGTH_LONG).show()
+                    }else{
+                        Toast.makeText(context,"Budget not deleted",Toast.LENGTH_LONG).show()
                     }
+                }
             }
-            .setNegativeButton("No") { dialog, _ -> dialog.dismiss() }
+            .setNegativeButton("No"){ dialog, _ ->
+                dialog.dismiss()
+            }
             .show()
     }
 }
