@@ -142,9 +142,9 @@ fun UpdateBudgetScreen(
                             navController = navController,
                             budgetId = budgetId,
                             budgetName = name.value,
-                            selectedCategory = category.value,
-                            budgetAmount = amount.value.toDouble(),
-                            budgetPeriod = period.value,
+                            category = category.value,
+                            amount = amount.value.toDouble(),
+                            period = period.value,
                             createdAt = System.currentTimeMillis()
                         )
 

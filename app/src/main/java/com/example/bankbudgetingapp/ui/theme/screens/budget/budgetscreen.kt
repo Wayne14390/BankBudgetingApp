@@ -41,6 +41,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.bankbudgetingapp.data.BudgetViewModel
 import com.example.bankbudgetingapp.models.BudgetModel
 import com.example.bankbudgetingapp.navigation.ADD_BUDGET
+import com.example.bankbudgetingapp.navigation.UPDATE_BUDGET
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -115,15 +116,15 @@ fun ViewBudgetScreen(
                                 style = MaterialTheme.typography.bodyLarge
                             )
                             Text(
-                                text = "Category: ${budget.selectedCategory}",
+                                text = "Category: ${budget.category}",
                                 style = MaterialTheme.typography.bodyMedium
                             )
                             Text(
-                                text = "Amount: ${budget.budgetAmount}",
+                                text = "Amount: ${budget.amount}",
                                 style = MaterialTheme.typography.bodyMedium
                             )
                             Text(
-                                text = "Period: ${budget.budgetPeriod}",
+                                text = "Period: ${budget.period}",
                                 style = MaterialTheme.typography.bodyMedium
                             )
 
@@ -148,7 +149,7 @@ fun ViewBudgetScreen(
 
                                 Button(
                                     onClick = {
-                                        navController.navigate("update_budget/${budget.budgetId}")
+                                        navController.navigate("$UPDATE_BUDGET/{budgetId}")
                                     }
                                 ) {
                                     Text("Update")

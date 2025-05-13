@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.bankbudgetingapp.models.BudgetModel
 import com.example.bankbudgetingapp.navigation.VIEW_BUDGET
@@ -13,6 +14,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class BudgetViewModel : ViewModel() {
@@ -20,47 +23,48 @@ class BudgetViewModel : ViewModel() {
     private val database = FirebaseDatabase.getInstance().reference.child("budgets")
 
     fun viewBudget(
-        budget: MutableState<BudgetModel?>,
+        selectedBudget: MutableState<BudgetModel?>,
         budgets: SnapshotStateList<BudgetModel>,
         context: Context
-    ): SnapshotStateList<BudgetModel> {
-        val ref = FirebaseDatabase.getInstance().getReference("budgets")
+    ) {
+        viewModelScope.launch {
+            try {
+                // Simulate fetching budget data
+                val budgetList = fetchBudgetsFromDatabase(context)
 
-        ref.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
+                // Update the budgets list
                 budgets.clear()
-                for (snap in snapshot.children) {
-                    val value = snap.getValue(BudgetModel::class.java)
-                    value?.let {
-                        budgets.add(it)
-                    }
-                }
-                if (budgets.isNotEmpty()) {
-                    budget.value = budgets.first()
-                }
+                budgets.addAll(budgetList)
+
+                // Reset selected budget
+                selectedBudget.value = null
+            } catch (e: Exception) {
+                // Handle any errors (e.g., show a Toast message)
+                Toast.makeText(context, "Failed to fetch budgets: ${e.message}", Toast.LENGTH_LONG).show()
             }
+        }
+    }
 
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(
-                    context,
-                    "Failed to fetch budgets: ${error.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
+    // Simulated function to fetch budget data from a database
+    private suspend fun fetchBudgetsFromDatabase(context: Context): List<BudgetModel> {
+        // This simulates a delay for a real database/network operation
+        delay(1000)
 
-            }
-        })
-
-        return budgets
-
+        // Return a sample list of budgets (replace with actual database query)
+        return listOf(
+            BudgetModel(budgetId = 1.toString(), budgetName = "Groceries", category = "Food", amount = 200.0, period = "Monthly"),
+            BudgetModel(budgetId = 2.toString(), budgetName = "Rent", category = "Housing", amount = 800.0, period = "Monthly"),
+            BudgetModel(budgetId = 3.toString(), budgetName = "Entertainment", category = "Leisure", amount = 150.0, period = "Monthly")
+        )
     }
     fun updateBudget(context: Context, navController: NavController,
-                     budgetId: String,budgetName: String ,selectedCategory: String,
-                     budgetAmount: Double, budgetPeriod: String, createdAt: Long){
+                     budgetId: String,budgetName: String ,category: String,
+                     amount: Double, period: String, createdAt: Long){
         val databaseReference = FirebaseDatabase.getInstance()
             .getReference("budgets/$budgetId")
         val updatedBudget =BudgetModel(
-            budgetId,budgetName,selectedCategory,
-            budgetAmount, budgetPeriod,createdAt
+            budgetId,budgetName,category,
+            amount, period,createdAt
         )
 
         databaseReference.setValue(updatedBudget)
