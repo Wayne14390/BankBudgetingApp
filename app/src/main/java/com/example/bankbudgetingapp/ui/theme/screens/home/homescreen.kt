@@ -57,6 +57,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.bankbudgetingapp.R
 import com.example.bankbudgetingapp.ScannerActivity
 import com.example.bankbudgetingapp.navigation.ADD_BUDGET
+import com.example.bankbudgetingapp.navigation.UPDATE_BUDGET
 import com.example.bankbudgetingapp.navigation.VIEW_BUDGET
 import com.example.bankbudgetingapp.navigation.VIEW_PROFILE
 import kotlinx.coroutines.launch
@@ -108,30 +109,14 @@ fun HomeScreen(navController: NavController) {
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
 
-                NavigationDrawerItem(
-                    label = { Text("Income") },
-                    selected = false,
-                    onClick = {
-                        scope.launch { drawerState.close() } // Close the drawer
-                        navController.navigate("income") // Navigate to Income screen
-                    },
-                    icon = {
-                        Image(
-                            painter = painterResource(id = R.drawable.baseline_attach_money_24),
-                            contentDescription = "Income",
-                            contentScale = ContentScale.FillBounds,
-                            modifier = Modifier.padding(),
-                        )
-                    },
-                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-                )
+
 
                 NavigationDrawerItem(
                     label = { Text("Settings") },
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() } // Close the drawer
-                        navController.navigate("settings") // Navigate to Settings screen
+                        navController.navigate(UPDATE_BUDGET) // Navigate to Settings screen
                     },
                     icon = {
                         Image(
